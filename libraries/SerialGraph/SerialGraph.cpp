@@ -32,7 +32,7 @@ void SerialGraph::print() {
 
 String SerialGraph::formatGraph() {
 
-	String rtn = "ch1: " + channel(_channel1, 512) + _channel1 + " ch2: " + channel(_channel2, 512) + _channel2 + " ch3: " + channel(_channel3, 512) + _channel3;
+	String rtn = "x: " + channel(_channel1, 512) + _channel1 + " y: " + channel(_channel2, 512) + _channel2 + " z: " + channel(_channel3, 512) + _channel3;
 
 	return rtn;
 }
@@ -40,6 +40,8 @@ String SerialGraph::formatGraph() {
 String SerialGraph::channel(int value, int offset) {
 	
 	String rtn;
+
+	//value = map(value, -90, 90, -512, 512);
 
 	value += offset;
 

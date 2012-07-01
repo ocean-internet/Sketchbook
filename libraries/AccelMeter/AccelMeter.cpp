@@ -2,15 +2,13 @@
 
 // kP = 2550 - full power @ +/-5 degrees
 AccelMeter::AccelMeter(
-	int xOut, int yOut, int zOut, bool range,
-	int selfTest, int gSelect, int zgDetect, int nSleep
+	int xOut, int yOut, int zOut, 
+	int selfTest, int gSelect, int zgDetect, int nSleep  
 ) {
 
 	_xOut     = xOut;
 	_yOut     = yOut;
 	_zOut     = zOut;
-
-	setRange(range);
 
 	_selfTest = selfTest;
 	_gSelect  = gSelect;
@@ -18,7 +16,17 @@ AccelMeter::AccelMeter(
 	_nSleep   = nSleep;
 }
 
-void AccelMeter::setup() {
+void AccelMeter::setup(bool range, int xLow, int xHigh, int yLow, int yHigh, int zLow, int zHigh) {
+
+	setRange(range);
+
+	_xLow = xLow;
+	_yLow = yLow;
+	_zLow = zLow;
+
+	_xHigh = xHigh;
+	_yHigh = yHigh;
+	_zHigh = zHigh;
 
 	pinMode(_selfTest, OUTPUT);
 	pinMode(_gSelect,  OUTPUT);
@@ -33,7 +41,8 @@ void AccelMeter::sleep() {
 
 void AccelMeter::wake() {
 	
-	digitalWrite(_nSleep, HIGH);
+	digitalWrite(_nSleep,   HIGH);
+	digitalWrite(_selfTest, LOW);
 }
 
 double AccelMeter::xG() {
@@ -71,20 +80,30 @@ bool AccelMeter::zeroG() {
 void AccelMeter::setRange(bool range) {
 
 	digitalWrite(_gSelect, range);
-	if(range == _1_5G) {
-
-		_range = 1.5;
-	} else {
-		_range = 6;
-	}
 }
 
 void AccelMeter::setRad() {
 
 	setG();
 
-	_xRad = asin(_xG);
-	_yRad = asin(_yG);
+	double nintyDegrees = 1.57079633;
+
+	if(_xG >= 1) {
+		_xRad = nintyDegrees;
+	} else if(_xG <= -1) {
+		_xRad = -(nintyDegrees);	
+	} else {
+		_xRad = asin(_xG);
+	}
+
+	if(_yG >= 1) {
+		_yRad = nintyDegrees;
+	} else if(_yG <= -1) {
+		_yRad = -(nintyDegrees);
+	} else {
+		_yRad = asin(_yG);	
+	}
+	
 	_zRad = acos(_zG);
 }
 
@@ -92,9 +111,9 @@ void AccelMeter::setG() {
 
 	setRaw();
 
-	_xG = calcG(_xRaw, 567, 1.395);
-	_yG = calcG(_yRaw, 512);
-	_zG = calcG(_zRaw);
+	_xG = ((double) map(_xRaw, _xLow, _xHigh, -1024, 1024)) / 1024;
+	_yG = ((double) map(_yRaw, _yLow, _yHigh, -1024, 1024)) / 1024;
+	_zG = ((double) map(_zRaw, _zLow, _zHigh, -1024, 1024)) / 1024;
 }
 
 void AccelMeter::setRaw() {
@@ -102,13 +121,4 @@ void AccelMeter::setRaw() {
 	_xRaw = analogRead(_xOut);
 	_yRaw = analogRead(_yOut);
 	_zRaw = analogRead(_zOut);
-}
-
-
-double AccelMeter::calcG(int raw, int offset, double scale) {
-
-	int calibratedRaw = ((raw - offset) * scale);
-	double g = calibratedRaw * _range / 1024 * 2;
-		
-	return g;
 }

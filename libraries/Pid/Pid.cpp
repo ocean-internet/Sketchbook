@@ -23,7 +23,7 @@ Pid::Pid(double* Input, double* Output, double* Setpoint,
 	Pid::SetOutputLimits(-255, 255);			//default output limit corresponds to 
 												//the arduino pwm limits
 
-    SampleTime = 500;							//default Controller Sample Time is 0.1 seconds
+    SampleTime = 1250;							//default Controller Sample Time is 0.1 seconds
 
     Pid::SetControllerDirection(ControllerDirection);
     Pid::SetTunings(Kp, Ki, Kd);
@@ -49,6 +49,7 @@ void Pid::Compute()
    unsigned long timeChange = (now - lastTime);
    if(timeChange>=SampleTime)
    {
+		digitalWrite(13, LOW);
       /*Compute all the working error variables*/
 	  double input = *myInput;
       double error = *mySetpoint - input;
@@ -67,7 +68,9 @@ void Pid::Compute()
       /*Remember some variables for next time*/
       lastInput = input;
       lastTime = now;
-   }
+   } else {
+		digitalWrite(13, HIGH);
+	}
 }
 
 
