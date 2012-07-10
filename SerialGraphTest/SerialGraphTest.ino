@@ -15,8 +15,8 @@ void setup() {
 
 void loop() {
   
-  Graph.value(1, analogRead(0));
-  Graph.value(2, analogRead(1));
-  Graph.value(3, analogRead(2));
+  Graph.value(1, analogRead(3));
+  Graph.value(2, analogRead(4));
+  Graph.value(3, analogRead(5));
   Graph.print();
 }

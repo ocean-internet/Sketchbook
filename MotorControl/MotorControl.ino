@@ -1,14 +1,14 @@
+#include <KalmanFilter.h>
 #include <Pid.h>
 #include <Motor.h>
 #include <AccelMeter.h>
-//#include <SerialGraph.h>
 
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
 
-double Kp = 1024;
-double Ki = 512;
-double Kd = 128;
+double Kp = 2000;
+double Ki = 128;
+double Kd = 164;
 
 //Specify the links and initial tuning parameters
 Pid myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
@@ -19,10 +19,10 @@ int motorSpeed  = 0;
 Motor myMotor(3, 4, 5);
 
 AccelMeter am(0, 1, 2, 8, 9, 10, 11);
-int xLow  = 292;
-int xHigh = 780;
-int zLow  = 385;
-int zHigh = 625;
+int xLow  = 320;
+int xHigh = 804;
+int zLow  = 398;
+int zHigh = 636;
 
 void setup() {
   
@@ -30,7 +30,7 @@ void setup() {
   Input    = 0;
   // Higher -> board
   // Lower  -> battery
-  Setpoint = 115.5;
+  Setpoint = 100;
   
   pinMode(13, OUTPUT);
   

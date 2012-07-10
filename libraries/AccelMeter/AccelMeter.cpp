@@ -7,7 +7,7 @@ AccelMeter::AccelMeter(
 ) {
 
 	_xOut     = xOut;
-	_yOut     = yOut;
+	//_yOut     = yOut;
 	_zOut     = zOut;
 
 	_selfTest = selfTest;
@@ -21,11 +21,11 @@ void AccelMeter::setup(bool range, int xLow, int xHigh, int yLow, int yHigh, int
 	setRange(range);
 
 	_xLow = xLow;
-	_yLow = yLow;
+	//_yLow = yLow;
 	_zLow = zLow;
 
 	_xHigh = xHigh;
-	_yHigh = yHigh;
+	//_yHigh = yHigh;
 	_zHigh = zHigh;
 
 	pinMode(_selfTest, OUTPUT);
@@ -86,23 +86,25 @@ void AccelMeter::setRad() {
 
 	setG();
 
-	double nintyDegrees = 1.57079633;
+	double ninteyDegrees = 1.57079633;
 
 	if(_xG >= 1) {
-		_xRad = nintyDegrees;
+		_xRad = ninteyDegrees;
 	} else if(_xG <= -1) {
-		_xRad = -(nintyDegrees);	
+		_xRad = -(ninteyDegrees);	
 	} else {
 		_xRad = asin(_xG);
 	}
 
+	/*
 	if(_yG >= 1) {
-		_yRad = nintyDegrees;
+		_yRad = ninteyDegrees;
 	} else if(_yG <= -1) {
-		_yRad = -(nintyDegrees);
+		_yRad = -(ninteyDegrees);
 	} else {
 		_yRad = asin(_yG);	
 	}
+	*/
 	
 	_zRad = acos(_zG);
 }
@@ -112,13 +114,13 @@ void AccelMeter::setG() {
 	setRaw();
 
 	_xG = ((double) map(_xRaw, _xLow, _xHigh, -1024, 1024)) / 1024;
-	_yG = ((double) map(_yRaw, _yLow, _yHigh, -1024, 1024)) / 1024;
+	//_yG = ((double) map(_yRaw, _yLow, _yHigh, -1024, 1024)) / 1024;
 	_zG = ((double) map(_zRaw, _zLow, _zHigh, -1024, 1024)) / 1024;
 }
 
 void AccelMeter::setRaw() {
 	
 	_xRaw = analogRead(_xOut);
-	_yRaw = analogRead(_yOut);
+	//_yRaw = analogRead(_yOut);
 	_zRaw = analogRead(_zOut);
 }

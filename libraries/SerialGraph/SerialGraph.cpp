@@ -41,7 +41,7 @@ String SerialGraph::channel(int value, int offset) {
 	
 	String rtn;
 
-	//value = map(value, -90, 90, -512, 512);
+	value = map(value, -90, 90, -512, 512);
 
 	value += offset;
 
