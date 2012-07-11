@@ -7,14 +7,14 @@
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
 
-double Kp = 1;
+double Kp = 10000;
 double Ki = 0;
 double Kd = 0;
 
 //Specify the links and initial tuning parameters
 Pid myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
-int speedOffset = 64;
+int speedOffset = 200;
 int motorSpeed  = 0;
 
 Motor myMotor(3, 4, 5);
@@ -189,7 +189,7 @@ void loop() {
 		mpu.dmpGetGravity(&gravity, &q);
 		mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
 
-		Input = ypr[2] * 1000;
+		Input = ypr[1] * 1000;
 	}
 }
 
